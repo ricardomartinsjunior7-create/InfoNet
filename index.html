@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>InfoNet – Assistência e loja de informática em Rio Grande</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:dark;
+  --bg:#050a14; --bg2:#0a1424; --panel:rgba(13,25,45,.72); --ink:#e7f2ff; --muted:#8fa7c6;
+  --line:#1b3250; --cyan:#27e0ff; --violet:#8d6bff; --cyan-ink:#031219;
+  --display:"Chakra Petch","Trebuchet MS",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark}}
+:root[data-theme="dark"]{color-scheme:dark}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px);scroll-behavior:smooth;background:var(--bg)}
+*,*::before,*::after{box-sizing:inherit}
+body{
+  margin:0;color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;
+  background:
+    radial-gradient(900px 500px at 85% -10%,rgba(141,107,255,.20),transparent 60%),
+    radial-gradient(800px 500px at -10% 10%,rgba(39,224,255,.14),transparent 60%),
+    var(--bg);
+  background-attachment:fixed;
+}
+body::before{ /* grade técnica */
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background-image:linear-gradient(rgba(39,224,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(39,224,255,.045) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:linear-gradient(to bottom,#000 0%,transparent 85%);
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,transparent 85%);
+}
+h1,h2,h3{font-family:var(--display);line-height:1.08;margin:0;letter-spacing:-.01em;font-weight:700}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+/* topo */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:rgba(5,10,20,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:66px;gap:16px}
+.logo{font-family:var(--display);font-weight:700;font-size:24px;text-decoration:none;display:flex;align-items:center;gap:10px;letter-spacing:.01em}
+.logo svg{width:28px;height:28px;filter:drop-shadow(0 0 8px rgba(39,224,255,.7))}
+.logo span{color:var(--cyan)}
+nav{display:flex;gap:24px;align-items:center}
+nav a{text-decoration:none;font-weight:500;font-size:15px;color:var(--muted)}
+nav a:hover{color:var(--ink)}
+nav a.btn{color:var(--cyan-ink)}
+.btn{display:inline-block;background:var(--cyan);color:var(--cyan-ink);font-weight:600;padding:12px 22px;text-decoration:none;border:0;font:inherit;font-weight:600;cursor:pointer;
+  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
+  box-shadow:0 0 24px rgba(39,224,255,.35);transition:filter .15s}
+.btn:hover{filter:brightness(1.12)}
+.btn.ghost{background:transparent;color:var(--cyan);box-shadow:none;position:relative;clip-path:none;border:1px solid var(--cyan);border-radius:2px}
+.btn.ghost:hover{background:rgba(39,224,255,.1)}
+@media(max-width:720px){nav a:not(.btn){display:none}}
+
+/* hero */
+.hero{padding:72px 0 80px}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:start}
+.hero h1{font-size:clamp(2.5rem,6vw,4.4rem);font-weight:700;text-wrap:balance}
+.hero h1::after{content:"";display:block;width:120px;height:4px;margin-top:22px;background:linear-gradient(90deg,var(--cyan),var(--violet));box-shadow:0 0 18px var(--cyan)}
+.hero .lead{margin-top:22px;font-size:1.15rem;color:var(--muted);max-width:46ch}
+.hero .cta{margin-top:28px;display:flex;gap:14px;flex-wrap:wrap}
+
+/* painel de diagnóstico (HUD) */
+.hud{position:relative;background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);overflow:hidden}
+.hud::before,.hud::after{content:"";position:absolute;width:22px;height:22px;border:2px solid var(--cyan);pointer-events:none;z-index:2}
+.hud::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.hud::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.hud .scan{position:absolute;left:0;right:0;top:0;height:90px;pointer-events:none;
+  background:linear-gradient(to bottom,transparent,rgba(39,224,255,.10),transparent);
+  animation:scan 5s linear infinite}
+@keyframes scan{from{transform:translateY(-100px)}to{transform:translateY(520px)}}
+.hud h2{font-size:1.15rem;padding:16px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.hud h2::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.hud .body{padding:20px 22px 22px;position:relative}
+fieldset{border:0;padding:0;margin:0}
+legend{font-weight:500;color:var(--muted);margin-bottom:10px;padding:0;font-size:15px}
+.opts{display:grid;gap:8px}
+.opts label{display:flex;gap:12px;align-items:center;padding:12px 14px;border:1px solid var(--line);background:rgba(5,10,20,.5);cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.opts label:hover{border-color:var(--cyan)}
+.opts input{accent-color:var(--cyan);width:18px;height:18px}
+.opts label:has(input:checked){border-color:var(--cyan);box-shadow:0 0 18px rgba(39,224,255,.25),inset 0 0 0 1px var(--cyan)}
+.result{margin-top:16px;padding:16px 18px;border-left:4px solid var(--violet);background:rgba(141,107,255,.10);animation:rise .35s ease-out}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.result[hidden]{display:none}
+.result strong{display:block;font-family:var(--display);font-size:1.12rem;margin-bottom:4px}
+.result p{color:var(--muted);font-size:15.5px}
+.result dl{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;margin:12px 0 16px;font-size:15px}
+.result dt{color:var(--muted)}
+.result dd{margin:0;font-weight:600;color:var(--cyan)}
+@media(max-width:860px){.hero .wrap{grid-template-columns:1fr}}
+
+/* seções */
+section{padding:80px 0}
+.head{max-width:60ch;margin-bottom:38px}
+.head h2{font-size:clamp(1.9rem,4vw,2.7rem)}
+.head h2::before{content:"";display:block;width:36px;height:3px;background:var(--cyan);box-shadow:0 0 12px var(--cyan);margin-bottom:16px}
+.head p{margin-top:12px;color:var(--muted)}
+
+/* serviços */
+.svc{border-top:1px solid var(--line)}
+.svc .row{display:grid;grid-template-columns:260px 1fr auto;gap:24px;padding:24px 14px;border-bottom:1px solid var(--line);align-items:baseline;position:relative;transition:background .2s}
+.svc .row::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--cyan);box-shadow:0 0 14px var(--cyan);transform:scaleY(0);transition:transform .2s}
+.svc .row:hover{background:rgba(39,224,255,.05)}
+.svc .row:hover::before{transform:scaleY(1)}
+.svc h3{font-size:1.35rem}
+.svc .row p{color:var(--muted)}
+.svc .price{font-family:var(--display);font-weight:600;white-space:nowrap;color:var(--cyan);font-size:1.1rem}
+@media(max-width:720px){.svc .row{grid-template-columns:1fr;gap:6px}}
+
+/* etapas: linha do tempo */
+.steps{background:linear-gradient(180deg,transparent,rgba(13,25,45,.8) 20%,rgba(13,25,45,.8) 80%,transparent)}
+.steps ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:0;counter-reset:s;position:relative}
+.steps ol::before{content:"";position:absolute;left:0;right:0;top:19px;height:2px;background:linear-gradient(90deg,var(--cyan),var(--violet));box-shadow:0 0 12px var(--cyan);opacity:.7}
+.steps li{counter-increment:s;padding:0 24px 0 0;position:relative}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--bg);border:2px solid var(--cyan);color:var(--cyan);font-family:var(--display);font-weight:700;margin-bottom:20px;position:relative;box-shadow:0 0 16px rgba(39,224,255,.5)}
+.steps h3{font-size:1.2rem;margin-bottom:6px}
+.steps li p{color:var(--muted);font-size:15px}
+@media(max-width:860px){.steps ol{grid-template-columns:1fr 1fr;gap:32px 20px}.steps ol::before{display:none}}
+@media(max-width:520px){.steps ol{grid-template-columns:1fr}}
+
+/* loja */
+.shop{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.item{position:relative;background:var(--panel);border:1px solid var(--line);padding:24px;display:flex;flex-direction:column;gap:12px;
+  clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px))}
+.item h3{font-size:1.25rem}
+.item ul{margin:0;padding-left:18px;color:var(--muted);font-size:15px}
+.item .p{margin-top:auto;font-family:var(--display);font-weight:700;font-size:1.8rem;color:var(--cyan)}
+.item.hl{border-color:var(--cyan);background:linear-gradient(160deg,rgba(39,224,255,.14),rgba(141,107,255,.14))}
+.tag{align-self:flex-start;background:var(--violet);color:#fff;font-size:13px;font-weight:600;padding:2px 12px;letter-spacing:.02em}
+@media(max-width:860px){.shop{grid-template-columns:1fr}}
+
+/* contato */
+.contact .wrap{display:grid;grid-template-columns:1fr 1fr;gap:52px}
+form{display:grid;gap:14px}
+label.f{display:grid;gap:6px;font-weight:500;font-size:15px}
+input[type=text],input[type=tel],select,textarea{font:inherit;color:var(--ink);background:rgba(5,10,20,.7);border:1px solid var(--line);padding:12px;width:100%;border-radius:0}
+input:focus,select:focus,textarea:focus{border-color:var(--cyan);outline:none;box-shadow:0 0 0 3px rgba(39,224,255,.2)}
+select option{background:#0a1424;color:#e7f2ff}
+textarea{min-height:110px;resize:vertical}
+.info p{margin-bottom:16px;color:var(--muted)}
+.info b{display:block;font-family:var(--display);font-size:1.05rem;color:var(--ink)}
+.info a{color:var(--cyan)}
+.ok{padding:16px;border-left:4px solid var(--cyan);background:rgba(39,224,255,.08);display:none}
+.ok.show{display:block}
+
+footer{padding:30px 0;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+@media(max-width:860px){.contact .wrap{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hud .scan{animation:none;display:none}.result{animation:none}*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#topo" aria-label="InfoNet, início">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><polygon points="16,2 28,9 28,23 16,30 4,23 4,9" fill="none" stroke="#27e0ff" stroke-width="2"/><circle cx="16" cy="16" r="4" fill="#27e0ff"/></svg>
+      Info<span>Net</span>
+    </a>
+    <nav aria-label="Principal">
+      <a href="#servicos">Serviços</a>
+      <a href="#como">Como funciona</a>
+      <a href="#loja">Loja</a>
+      <a class="btn" href="#contato">Pedir orçamento</a>
+    </nav>
+  </div>
+</header>
+
+<main id="topo">
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <h1>Computador lento, travando ou com vírus? A gente resolve.</h1>
+      <p class="lead">Assistência técnica, redes e venda de equipamentos para casa e empresa. Diagnóstico claro, preço combinado antes e garantia por escrito.</p>
+      <div class="cta">
+        <a class="btn" href="https://wa.me/5553991636666?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20InfoNet%20e%20gostaria%20de%20falar%20com%20um%20t%C3%A9cnico." target="_blank" rel="noopener">Falar com um técnico</a>
+        <a class="btn ghost" href="#servicos">Ver serviços</a>
+      </div>
+    </div>
+
+    <div class="hud">
+      <div class="scan" aria-hidden="true"></div>
+      <h2>O que está acontecendo com o seu computador?</h2>
+      <div class="body">
+        <fieldset>
+          <legend>Escolha o sintoma mais parecido</legend>
+          <div class="opts" id="opts">
+            <label><input type="radio" name="s" value="lento"> Está muito lento ou demora para ligar</label>
+            <label><input type="radio" name="s" value="tela"> Não liga ou a tela fica preta</label>
+            <label><input type="radio" name="s" value="virus"> Aparecem propagandas ou programas estranhos</label>
+            <label><input type="radio" name="s" value="wifi"> A internet cai ou o Wi-Fi não pega</label>
+          </div>
+        </fieldset>
+        <div class="result" id="result" hidden aria-live="polite">
+          <strong id="r-title"></strong>
+          <p id="r-text"></p>
+          <dl>
+            <dt>Prazo comum</dt><dd id="r-time"></dd>
+            <dt>Valor a partir de</dt><dd id="r-price"></dd>
+          </dl>
+          <a class="btn" href="#contato" id="r-btn">Pedir este serviço</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="servicos">
+  <div class="wrap">
+    <div class="head">
+      <h2>O que a gente faz</h2>
+      <p>Valores de referência. O preço final é informado depois do diagnóstico e só é executado com a sua aprovação.</p>
+    </div>
+    <div class="svc">
+      <div class="row"><h3>Manutenção e limpeza</h3><p>Limpeza interna, troca de pasta térmica e revisão de ventoinhas em notebooks e desktops.</p><span class="price">R$ 90</span></div>
+      <div class="row"><h3>Formatação e backup</h3><p>Instalação do Windows ou Linux, drivers, programas e cópia dos seus arquivos antes de começar.</p><span class="price">R$ 120</span></div>
+      <div class="row"><h3>Remoção de vírus</h3><p>Limpeza de malware, adware e extensões suspeitas, com antivírus configurado no final.</p><span class="price">R$ 80</span></div>
+      <div class="row"><h3>Upgrade de SSD e memória</h3><p>Troca do HD por SSD e ampliação de RAM. Seu computador volta a ficar rápido sem comprar outro.</p><span class="price">R$ 70 + peças</span></div>
+      <div class="row"><h3>Redes e Wi-Fi</h3><p>Instalação de roteadores, repetidores e cabeamento para casa, loja ou escritório.</p><span class="price">R$ 150</span></div>
+      <div class="row"><h3>Suporte para empresas</h3><p>Contrato mensal com atendimento remoto e visitas, backup e controle dos equipamentos.</p><span class="price">sob consulta</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="steps" id="como">
+  <div class="wrap">
+    <div class="head">
+      <h2>Como funciona o atendimento</h2>
+      <p>Você sabe o que está sendo feito e quanto vai pagar em cada etapa.</p>
+    </div>
+    <ol>
+      <li><h3>Você conta o problema</h3><p>Por WhatsApp, telefone ou aqui no site. Se der, resolvemos remotamente.</p></li>
+      <li><h3>Diagnóstico</h3><p>Testamos o equipamento e explicamos a causa em linguagem simples.</p></li>
+      <li><h3>Orçamento aprovado</h3><p>Valor e prazo combinados antes de qualquer peça ser trocada.</p></li>
+      <li><h3>Entrega com garantia</h3><p>Você retira com laudo do serviço e 90 dias de garantia.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section id="loja">
+  <div class="wrap">
+    <div class="head">
+      <h2>Computadores prontos para usar</h2>
+      <p>Equipamentos testados, com garantia e já configurados.</p>
+    </div>
+    <div class="shop">
+      <div class="item">
+        <h3>Escritório básico</h3>
+        <ul><li>Intel Core i3, 8 GB de RAM</li><li>SSD de 256 GB</li><li>Windows instalado</li></ul>
+        <div class="p">R$ 1.890</div>
+        <a class="btn ghost" href="#contato">Tenho interesse</a>
+      </div>
+      <div class="item hl">
+        <span class="tag">Mais vendido</span>
+        <h3>Estudo e trabalho</h3>
+        <ul><li>Intel Core i5, 16 GB de RAM</li><li>SSD de 512 GB</li><li>Pacote de escritório incluso</li></ul>
+        <div class="p">R$ 2.790</div>
+        <a class="btn" href="#contato">Tenho interesse</a>
+      </div>
+      <div class="item">
+        <h3>Jogos e edição</h3>
+        <ul><li>Ryzen 5, 16 GB de RAM</li><li>SSD de 1 TB e placa de vídeo dedicada</li><li>Montado e testado na loja</li></ul>
+        <div class="p">R$ 4.590</div>
+        <a class="btn ghost" href="#contato">Tenho interesse</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contato">
+  <div class="wrap">
+    <div class="info">
+      <div class="head" style="margin-bottom:24px">
+        <h2>Peça seu orçamento</h2>
+        <p>Respondemos no mesmo dia útil.</p>
+      </div>
+      <p><b>WhatsApp</b><a href="https://wa.me/5553991636666" target="_blank" rel="noopener">(53) 99163-6666</a></p>
+      <p><b>Endereço</b>João Colins, 15 – Bairro Mangueira<br>Rio Grande – RS</p>
+      <p><b>Horário</b>Segunda a sexta, 9h às 18h. Sábado, 9h às 13h.</p>
+    </div>
+    <form id="f" novalidate>
+      <label class="f">Seu nome<input type="text" name="nome" required autocomplete="name"></label>
+      <label class="f">Telefone com DDD<input type="tel" name="tel" required autocomplete="tel"></label>
+      <label class="f">Assunto
+        <select name="assunto" id="assunto">
+          <option>Conserto ou manutenção</option>
+          <option>Formatação e backup</option>
+          <option>Remoção de vírus</option>
+          <option>Rede e Wi-Fi</option>
+          <option>Comprar computador</option>
+          <option>Suporte para empresa</option>
+        </select>
+      </label>
+      <label class="f">Descreva o problema<textarea name="msg"></textarea></label>
+      <button class="btn" type="submit">Enviar pedido</button>
+      <div class="ok" id="ok" role="status">
+        <p><b>Pedido pronto.</b> Toque no botão abaixo para enviar pelo WhatsApp da InfoNet.</p>
+        <p style="margin:12px 0"><a class="btn" id="wa-link" href="https://wa.me/5553991636666" target="_blank" rel="noopener">Enviar pelo WhatsApp</a></p>
+        <p style="font-size:14px;color:var(--muted)">Se o WhatsApp não abrir, copie a mensagem e envie para (53) 99163-6666.</p>
+        <textarea id="wa-msg" readonly style="margin-top:10px" aria-label="Mensagem do pedido"></textarea>
+        <p style="margin-top:10px"><button class="btn ghost" type="button" id="copy">Copiar mensagem</button> <span id="copied" style="margin-left:8px;font-size:14px"></span></p>
+      </div>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">© 2026 InfoNet.com.br – Assistência técnica e loja de informática em Rio Grande/RS.</div>
+</footer>
+
+<script>
+(function(){
+  var dados = {
+    lento:{t:"Provável lentidão por disco antigo ou excesso de programas",x:"Na maioria dos casos, trocar o HD por SSD e fazer uma limpeza de sistema deixa o computador como novo.",p:"R$ 70 + SSD",d:"1 dia",a:"Formatação e backup"},
+    tela:{t:"Pode ser fonte, memória, placa ou tela",x:"Testamos cada componente para achar a causa sem trocar peça à toa. Não tente abrir o equipamento ligado na tomada.",p:"R$ 60 (diagnóstico)",d:"1 a 3 dias",a:"Conserto ou manutenção"},
+    virus:{t:"Sinais comuns de vírus ou adware",x:"Evite digitar senhas bancárias nesse computador até a limpeza. Removemos o malware e configuramos a proteção.",p:"R$ 80",d:"No mesmo dia",a:"Remoção de vírus"},
+    wifi:{t:"Problema de roteador, sinal ou provedor",x:"Medimos o sinal, testamos o roteador e propomos repetidor ou novo posicionamento antes de vender qualquer aparelho.",p:"R$ 150",d:"Visita em até 48 h",a:"Rede e Wi-Fi"}
+  };
+  var box = document.getElementById('result');
+  document.getElementById('opts').addEventListener('change', function(e){
+    var d = dados[e.target.value]; if(!d) return;
+    document.getElementById('r-title').textContent = d.t;
+    document.getElementById('r-text').textContent = d.x;
+    document.getElementById('r-time').textContent = d.d;
+    document.getElementById('r-price').textContent = d.p;
+    document.getElementById('r-btn').dataset.assunto = d.a;
+    box.hidden = false;
+    box.style.animation = 'none'; void box.offsetWidth; box.style.animation = '';
+  });
+  document.getElementById('r-btn').addEventListener('click', function(){
+    var s = document.getElementById('assunto'), v = this.dataset.assunto;
+    for (var i=0;i<s.options.length;i++){ if(s.options[i].text===v){ s.selectedIndex=i; } }
+  });
+  document.getElementById('copy').addEventListener('click', function(){
+    var ta = document.getElementById('wa-msg'), msg = document.getElementById('copied');
+    ta.select();
+    function ok(){ msg.textContent = 'Mensagem copiada.'; }
+    function manual(){ try{ document.execCommand('copy'); ok(); }catch(e){ msg.textContent = 'Selecione o texto e copie manualmente.'; } }
+    if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(ta.value).then(ok, manual); } else { manual(); }
+  });
+  document.getElementById('f').addEventListener('submit', function(e){
+    e.preventDefault();
+    var f = this.elements;
+    var texto = 'Olá, vim pelo site da InfoNet.\n' +
+      'Nome: ' + f.nome.value + '\n' +
+      'Telefone: ' + f.tel.value + '\n' +
+      'Assunto: ' + f.assunto.value + '\n' +
+      'Problema: ' + f.msg.value;
+    document.getElementById('wa-link').href = 'https://wa.me/5553991636666?text=' + encodeURIComponent(texto);
+    document.getElementById('wa-msg').value = texto;
+    document.getElementById('ok').classList.add('show');
+    document.getElementById('ok').scrollIntoView({block:'center'});
+    this.reset();
+  });
+})();
+</script>
+</body>
+</html>
